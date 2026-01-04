@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SHUBH AI | MODERN</title>
+    <style>
+        :root {
+            --primary: #6366f1; /* Modern Indigo */
+            --glass: rgba(255, 255, 255, 0.1);
+            --text: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #0f172a; /* Deep navy base */
+            overflow: hidden;
+        }
+
+        /* Animated Mesh Background */
+        .bg-wrapper {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            filter: blur(80px);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: move 20s infinite alternate;
+        }
+
+        .orb-1 { width: 400px; height: 400px; background: #4f46e5; top: -10%; left: -10%; }
+        .orb-2 { width: 500px; height: 500px; background: #7c3aed; bottom: -10%; right: -10%; animation-delay: -5s; }
+        .orb-3 { width: 300px; height: 300px; background: #2563eb; top: 40%; left: 30%; animation-duration: 15s; }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(100px, 50px) scale(1.1); }
+        }
+
+        /* Glass Container */
+        .glass-panel {
+            width: 90%;
+            max-width: 800px;
+            height: 80vh;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        header {
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .dot { width: 12px; height: 12px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; }
+
+        #screen {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.2) transparent;
+        }
+
+        .msg {
+            max-width: 80%;
+            padding: 14px 20px;
+            border-radius: 18px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .u-msg {
+            align-self: flex-end;
+            background: var(--primary);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .a-msg {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+            border-bottom-left-radius: 4px;
+            white-space: pre-wrap;
+        }
+
+        .input-area {
+            padding: 20px 30px;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            display: flex;
+            gap: 15px;
+        }
+
+        input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px 20px;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--primary); background: rgba(255, 255, 255, 0.1); }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover { transform: translateY(-2px); filter: brightness(1.2); }
+    </style>
+
+    <script>
+        const API_KEY = "0af0aa67-676b-458b-b5f1-402143a28d0b"; 
+
+        async function typeText(div, text) {
+            let i = 0;
+            return new Promise((res) => {
+                function t() {
+                    if (i < text.length) {
+                        div.innerHTML += text.charAt(i);
+                        i++;
+                        document.getElementById("screen").scrollTop = document.getElementById("screen").scrollHeight;
+                        setTimeout(t, 8);
+                    } else { res(); }
+                }
+                t();
+            });
+        }
+
+        async function run() {
+            const box = document.getElementById("userIn");
+            const screen = document.getElementById("screen");
+            const prompt = box.value.trim();
+            if (!prompt) return;
+
+            screen.innerHTML += `<div class="msg u-msg">${prompt}</div>`;
+            box.value = "";
+
+            const aDiv = document.createElement("div");
+            aDiv.className = "msg a-msg";
+            aDiv.innerHTML = "Thinking...";
+            screen.appendChild(aDiv);
+            screen.scrollTop = screen.scrollHeight;
+
+            try {
+                const res = await fetch("https://api.sambanova.ai/v1/chat/completions", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${API_KEY}` },
+                    body: JSON.stringify({ 
+                        model: "Meta-Llama-3.3-70B-Instruct",
+                        messages: [{ role: "user", content: prompt }]
+                    })
+                });
+                const data = await res.json();
+                aDiv.innerHTML = "";
+                await typeText(aDiv, data.choices[0].message.content);
+            } catch (e) {
+                aDiv.innerHTML = "Error connecting to Shubh AI server.";
+            }
+        }
+
+        window.onload = () => {
+            document.getElementById("userIn").addEventListener("keypress", (e) => { if (e.key === "Enter") run(); });
+        };
+    </script>
+</head>
+<body>
+    <div class="bg-wrapper">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="glass-panel">
+        <header>
+            <div class="dot"></div>
+            <span style="color: white; font-weight: 600; letter-spacing: 1px;">SHUBH AI v10.0</span>
+        </header>
+        <div id="screen">
+            <div class="msg a-msg">Hello! How can I assist you today?</div>
+        </div>
+        <div class="input-area">
+            <input type="text" id="userIn" placeholder="Ask anything..." autofocus>
+            <button onclick="run()">Send</button>
+        </div>
+    </div>
+</body>
+</html>
