@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veda AI | Your Intelligent Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #6366f1;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            padding: 2rem 0;
+            text-align: center;
+            background: linear-gradient(to bottom, #1e293b, #0f172a);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 2rem auto;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 4rem;
+        }
+
+        .footer {
+            margin-top: auto;
+            padding: 2rem;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .container { width: 95%; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <h1>Veda AI</h1>
+        <p>Experience the next generation of intelligent conversation. Ask questions, explore ideas, and get instant assistance.</p>
+    </header>
+
+    <main class="container">
+        <iframe id="JotFormIFrame-0196de3ac8ce723d9c2fd0b8123a6f2136c8" 
+            title="Brahmin AI"
+            onload="window.parent.scrollTo(0,0)" 
+            allowtransparency="true"
+            allow="geolocation; microphone; camera; fullscreen"
+            src="https://agent.jotform.com/0196de3ac8ce723d9c2fd0b8123a6f2136c8/voice?embedMode=iframe&background=1&shadow=1"
+            frameborder="0" 
+            style="max-width:100%; height:688px; border:none; width:100%; border-radius: 15px;" 
+            scrolling="no">
+        </iframe>
+        <script src='https://cdn.jotfor.ms/s/umd/f1ececfb6e5/for-form-embed-handler.js'></script>
+        <script>
+            window.jotformEmbedHandler("iframe[id='JotFormIFrame-0196de3ac8ce723d9c2fd0b8123a6f2136c8']", "https://www.jotform.com")
+        </script>
+        </main>
+
+    <footer class="footer">
+        &copy; 2024 Veda AI. Powered by JotForm Agents.
+    </footer>
+
+</body>
+</html>
